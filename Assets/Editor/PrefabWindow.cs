@@ -8,6 +8,7 @@ public class PrefabWindow : EditorWindow
 
     GameObject myPrefab;
     Vector3 objPos;
+    float radius = 1f;
     
     [MenuItem("Personal Tools/Prefab Editor")]
     public static void ShowWindow()
@@ -28,6 +29,15 @@ public class PrefabWindow : EditorWindow
             Debug.Log("Button clicked");
             if (myPrefab != null)
             {
+                //if(Physics.CheckBox(objPos, new Vector3(1,1,1)/2, Quaternion.identity))
+                //{
+                //    Debug.Log("Object alrdy placed here");
+                //}
+                //else
+                //{
+                //    Instantiate(myPrefab, objPos, Quaternion.identity);
+                //}
+
                 Instantiate(myPrefab, objPos, Quaternion.identity);
             }
             else
