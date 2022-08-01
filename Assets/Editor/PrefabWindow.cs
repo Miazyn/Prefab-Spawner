@@ -49,21 +49,13 @@ public class PrefabWindow : EditorWindow
         {
             if (myPrefab != null)
             {
-                lastPlacedObject = (GameObject)Instantiate(myPrefab, objPos, Quaternion.identity);
-                //Instantiate(myPrefab, objPos, Quaternion.identity);
-                //Debug.Log(lastPlacedObject);
-                //var nameLastPlacedObj = PrefabUtility.GetCorrespondingObjectFromSource(myPrefab);
-                //--> Saves Object here.
-                string localPath = "Assets/Prefab/" + myPrefab.name +  ".prefab";
-          
-                //localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
-                bool prefabSuccess;
-                if (AssetDatabase.IsValidFolder(localPath))
-                {
-                    PrefabUtility.SaveAsPrefabAsset(lastPlacedObject, localPath, out prefabSuccess);
-                    //Debug.Log(prefabSuccess ? "Successfully saved" : "Failed to save");
-                }
-                contentsRoot = PrefabUtility.LoadPrefabContents(localPath);
+                lastPlacedObject = (GameObject)PrefabUtility.InstantiatePrefab(myPrefab);
+
+                Undo.RegisterCreatedObjectUndo(lastPlacedObject, "Undo Placed Prefab");
+
+                lastPlacedObject.transform.position = objPos;
+                lastPlacedObject.transform.rotation = Quaternion.identity;
+                
 
 
                 //SAVE EVERY DETAIL:
@@ -83,18 +75,7 @@ public class PrefabWindow : EditorWindow
             objPos.Set(Random.Range(0, 10), Random.Range(0, 10), Random.Range(0, 10));
         }
 
-        if (GUI.Button(new Rect(new Vector2(0, 120), new Vector2(70, 45)), "Undo"))
-        {
-            DestroyImmediate(lastPlacedObject);
-            Debug.Log(contentsRoot);
-            Debug.Log("Undo");
-        }
-        if (GUI.Button(new Rect(new Vector2(0, 160), new Vector2(70, 45)), "Redo"))
-        {
-            Instantiate(contentsRoot, lastPlacedPos, Quaternion.identity);
-            //contentsRoot = null;
-            Debug.Log("Redo");
-        }
+        
         EditorGUILayout.EndVertical();
 
     }
